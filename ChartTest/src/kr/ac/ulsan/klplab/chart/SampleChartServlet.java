@@ -172,8 +172,7 @@ public class SampleChartServlet extends HttpServlet
         for (int i = 0; i < legendCount; i++) {
             renderer.setSeriesItemLabelGenerator(i, generator);
             renderer.setSeriesItemLabelsVisible(i, true);
-            Font itemFont = renderer.getSeriesItemLabelFont(i);
-            renderer.setSeriesItemLabelFont(i, replaceFont(itemFont));
+            renderer.setSeriesItemLabelFont(i, new Font(hangulFontName, Font.BOLD, 12));
         }
     }
     
