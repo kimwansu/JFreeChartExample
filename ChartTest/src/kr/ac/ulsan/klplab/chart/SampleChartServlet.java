@@ -172,14 +172,16 @@ public class SampleChartServlet extends HttpServlet
         for (int i = 0; i < legendCount; i++) {
             renderer.setSeriesItemLabelGenerator(i, generator);
             renderer.setSeriesItemLabelsVisible(i, true);
-            renderer.setSeriesItemLabelFont(i, new Font(hangulFontName, Font.BOLD, 12));
+            Font itemFont = renderer.getSeriesItemLabelFont(i);
+            renderer.setSeriesItemLabelFont(i, replaceFont(itemFont));
         }
     }
     
     private void changeChartLegendTextFormat()
     {
         LegendTitle legend = chart.getLegend();
-        legend.setItemFont(new Font(hangulFontName, Font.PLAIN, 16));
+        Font legendFont = legend.getItemFont();
+        legend.setItemFont(replaceFont(legendFont));
     }
     
     private void setChartAntiAlias(boolean useAntiAlias)
