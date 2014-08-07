@@ -61,7 +61,7 @@ public class SampleChartServlet extends HttpServlet
         // 차트 속성 설정
         // 실제 구현에서는 컨트롤러에서 미리 자료를 준비해놓고
         // request 속성에 필요한 자료를 넣어서 사용할 것
-        //SampleChartData chartAttribute = (SampleChartData)request.getAttribute("testChartAttribute");
+        //setupChart((SampleChartData)request.getAttribute("testChartAttribute"));
         setupChart(SampleChartData.getSampleChartData());
         
         // 차트 만들기
