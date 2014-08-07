@@ -20,7 +20,7 @@ import org.jfree.data.category.*;
 /**
  * Servlet implementation class SampleChartServlet
  */
-@WebServlet("/ChartSampleServlet")
+@WebServlet("/SampleChartServlet")
 public class SampleChartServlet extends HttpServlet
 {
     // JFreeChart 라이브러리는 http://www.jfree.org/jfreechart/download.html에서 다운로드하여
@@ -66,8 +66,10 @@ public class SampleChartServlet extends HttpServlet
         request.setCharacterEncoding("UTF-8");
         
         // 차트 속성 설정
-        // Object 대신에 차트의 속성과 데이터를 담기에 적당한 단일 객체 타입 만들어서 사용
-        Object chartAttribute = request.getAttribute("testChartAttribute");
+        // 실제 구현에서는 컨트롤러에서 미리 자료를 준비해놓고
+        // request 속성에 필요한 자료를 넣어서 사용할 것
+        //SampleChartData chartAttribute = (SampleChartData)request.getAttribute("testChartAttribute");
+        SampleChartData chartAttribute = SampleChartData.getSampleChartData();
         setupChart(chartAttribute);
         
         // 차트 만들기
@@ -79,22 +81,17 @@ public class SampleChartServlet extends HttpServlet
         ChartUtilities.writeChartAsPNG(outputStream, chart, width, height);
     }
     
-    private void setupChart(Object chartAttribute)
+    private void setupChart(SampleChartData chartData)
     {
-        // 실제 구현에서는 컨트롤러에서 미리 자료를 준비해놓고
-        // request 속성에 필요한 자료를 넣어서 사용할 것
-        SampleDataDao dao = new SampleDataDao();
-        SampleData[] datas = dao.getSampleDataset();
-        
         // 차트 내용 설정
-        this.title = "차트 제목";
-        this.legendCount = 9;
-        this.categoryAxisLabel = "날짜";
-        this.valueAxisLabel = "수치";
-        this.dataset = prepareChartData(datas);
+        this.title = chartData.title;
+        this.legendCount = chartData.legendCount;
+        this.categoryAxisLabel = chartData.categoryAxisLabel;
+        this.valueAxisLabel = chartData.valueAxisLabel;
         
-        this.width = 4096;
-        this.height = 512;
+        this.dataset = prepareChartData(chartData.dataset);
+        this.width = chartData.chartWidth;
+        this.height = chartData.chartHeight;
     }
 
     private DefaultCategoryDataset prepareChartData(SampleData[] datas)
