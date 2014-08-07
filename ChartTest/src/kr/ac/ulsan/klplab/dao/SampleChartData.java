@@ -8,8 +8,8 @@ public class SampleChartData
     public String valueAxisLabel;
     
     public SampleData[] dataset;
-    public int chartWidth;
-    public int chartHeight;
+    public int width;
+    public int height;
     
     public static SampleChartData getSampleChartData()
     {
@@ -21,8 +21,8 @@ public class SampleChartData
         
         SampleDataDao dao = new SampleDataDao();
         chartData.dataset = dao.getSampleDataset();
-        chartData.chartWidth = 4096;
-        chartData.chartHeight = 512;
+        chartData.width = 4096;
+        chartData.height = 512;
         
         return chartData;
     }

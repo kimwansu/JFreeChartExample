@@ -32,20 +32,13 @@ public class SampleChartServlet extends HttpServlet
     private static final long serialVersionUID = 1L;
     private static final String hangulFontName = "맑은 고딕";
     
-    // 차트에 들어가는 범례 항목의 수
-    private int legendCount;
-    
     // 차트 객체
     private JFreeChart chart;
     private CategoryPlot plot;
     
-    // 차트 속성
-    private String title;
-    private String categoryAxisLabel;
-    private String valueAxisLabel;
+    // 차트 속성 및 데이터
+    private SampleChartData chartData;
     private DefaultCategoryDataset dataset;
-    private int width;
-    private int height;
     
     /**
      * @see HttpServlet#HttpServlet()
@@ -69,8 +62,7 @@ public class SampleChartServlet extends HttpServlet
         // 실제 구현에서는 컨트롤러에서 미리 자료를 준비해놓고
         // request 속성에 필요한 자료를 넣어서 사용할 것
         //SampleChartData chartAttribute = (SampleChartData)request.getAttribute("testChartAttribute");
-        SampleChartData chartAttribute = SampleChartData.getSampleChartData();
-        setupChart(chartAttribute);
+        setupChart(SampleChartData.getSampleChartData());
         
         // 차트 만들기
         createChart();
@@ -78,20 +70,14 @@ public class SampleChartServlet extends HttpServlet
         // 만든 차트를 이미지로 만들어서 출력하기
         response.setContentType("image/png");
         ServletOutputStream outputStream = response.getOutputStream();
-        ChartUtilities.writeChartAsPNG(outputStream, chart, width, height);
+        ChartUtilities.writeChartAsPNG(outputStream, chart, chartData.width, chartData.height);
     }
     
     private void setupChart(SampleChartData chartData)
     {
         // 차트 내용 설정
-        this.title = chartData.title;
-        this.legendCount = chartData.legendCount;
-        this.categoryAxisLabel = chartData.categoryAxisLabel;
-        this.valueAxisLabel = chartData.valueAxisLabel;
-        
+        this.chartData = chartData;
         this.dataset = prepareChartData(chartData.dataset);
-        this.width = chartData.chartWidth;
-        this.height = chartData.chartHeight;
     }
 
     private DefaultCategoryDataset prepareChartData(SampleData[] datas)
@@ -127,7 +113,7 @@ public class SampleChartServlet extends HttpServlet
     
     private void prepareBarChart()
     {
-        this.chart = ChartFactory.createBarChart(title, categoryAxisLabel, valueAxisLabel,
+        this.chart = ChartFactory.createBarChart(chartData.title, chartData.categoryAxisLabel, chartData.valueAxisLabel,
                 dataset, PlotOrientation.VERTICAL, true, false, false);
         this.plot = (CategoryPlot)chart.getPlot();
     }
@@ -169,7 +155,7 @@ public class SampleChartServlet extends HttpServlet
     {
         CategoryItemRenderer renderer = (CategoryItemRenderer)plot.getRenderer();
         StandardCategoryItemLabelGenerator generator = new StandardCategoryItemLabelGenerator();
-        for (int i = 0; i < legendCount; i++) {
+        for (int i = 0; i < chartData.legendCount; i++) {
             renderer.setSeriesItemLabelGenerator(i, generator);
             renderer.setSeriesItemLabelsVisible(i, true);
             renderer.setSeriesItemLabelFont(i, new Font(hangulFontName, Font.BOLD, 12));
